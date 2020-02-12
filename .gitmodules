@@ -1,0 +1,8 @@
+[submodule "MLTED"]
+	path = MLTED
+	url = https://github.com/khaled-rahman/MLTED
+	ignore = dirty
+[submodule "stereodist"]
+	path = stereodist
+	url = https://bitbucket.org/oesperlab/stereodist
+	ignore = dirty
