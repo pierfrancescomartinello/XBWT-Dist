@@ -39,5 +39,7 @@ The pairwise similarity with the edge tree can be found in the folder `./output/
 
 ###### References
 [1] Gerlinger et al. Genomic architecture and evolution of clear cell renal cell carcinomas defined by multiregion sequencing. Nature Genetics (2014)
+
 [2] Eirew et al. Dynamics of genomic clones in breast cancer patient xenografts at single-cell resolution. Nature (2015)
+
 [3] DiNardo et al. Distance measures for tumor evolutionary trees. Bioinformatics (2019)
