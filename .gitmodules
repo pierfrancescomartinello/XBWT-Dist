@@ -4,5 +4,5 @@
 	ignore = dirty
 [submodule "measures/stereodist"]
 	path = measures/stereodist
-	url = https://bitbucket.org/oesperlab/stereodist
+	url = https://bitbucket.org/oesperlab/stereodist.git
 	ignore = dirty
