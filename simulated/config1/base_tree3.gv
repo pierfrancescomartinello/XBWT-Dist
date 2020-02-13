@@ -1,0 +1,23 @@
+digraph G {
+0 [label="root"];
+3 [label="A,K,L"];
+4 [label="B,N"];
+2 [label="C"];
+9 [label="D,M"];
+10 [label="E"];
+7 [label="F"];
+8 [label="G,O"];
+6 [label="H"];
+1 [label="I"];
+5 [label="J"];
+0 -> 1;
+1 -> 2;
+0 -> 3;
+3 -> 4;
+4 -> 5;
+4 -> 6;
+2 -> 7;
+7 -> 8;
+7 -> 9;
+9 -> 10;
+}
