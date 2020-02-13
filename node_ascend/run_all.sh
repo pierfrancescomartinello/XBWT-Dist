@@ -19,4 +19,4 @@ do
     ../measures/MLTED/MLTED "MLTED/10.in" "MLTED/${i}.in" 2> /dev/null | tail -2 | head -1  | cut -f4 -d' ' >> "MLTED/results.txt"
 done
 
-python3 plot_ascend.py --csvs mp3/results.txt DISC/results.txt CASet/results.txt MLTED/results.txt --names MP3 DISC CASet MLTED --out desc.pdf
+python3 plot_ascend.py --csvs mp3/results.txt DISC/results.txt CASet/results.txt MLTED/results.txt --names MP3 DISC CASet MLTED --out plot.pdf
