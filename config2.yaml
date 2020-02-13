@@ -1,0 +1,3 @@
+dataout: 'simulated/config2'
+tot_pb: 30 
+simulate_params: '--labelswap 2 --noderemove 1 --labelremove 2 --labelduplication 2 --nodeswap 1 --totoperations=3'
