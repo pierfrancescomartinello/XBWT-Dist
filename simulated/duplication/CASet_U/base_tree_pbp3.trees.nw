@@ -1,0 +1,16 @@
+((((({E,T},{F,Q},M)B,({C,R})L)N,((G){I,S},H,A){K,P})J)D)root;
+((((({E,T},{F,Q},M)B,(R)L){K,P},((G){I,S},A)N)J)D)root;
+((((({E,T},{F,Q},M)B,({C,R}){L,M})N,((G)I,H,A){K,P}){J,E})D)root;
+((((({E,T},{F,Q,J},M){B,S},({C,R})L)N,((G){I,I},H,A){K,P})J)D)root;
+(((((G){I,S},{H,B,E},A){K,P},({E,T},{F,Q},M)B,({C,R})L)J)D)root;
+((((({E,T},{F,Q},M)B,{C,N})R,((G){I,S},H,A){K,P}){J,F})D)root;
+((((({E,T},{F,Q},M)B,({C,R})L)N,(({G,F}){I,S,A},H,A)K)J)D)root;
+((((({E,T},{F,Q,R},M)B,({C,R})L){N,B},((G){I,S},A){K,P})J)D)root;
+(((({C,R})L,E,{F,Q},M)N,((G){I,S},H,A){K,P})D)root;
+((((({E,T},{F,Q,L,E},M)B,({C,R})H)N,((G){I,S},L,A){K,P})J)D)root;
+((((({G,B}){I,S},H,A){K,P},({C,R})L,{E,T},{F,Q},M)J)D)root;
+(((((E,{F,Q},{M,I})B,({C,R})L)N,((G){I,S},A){K,P})J)D)root;
+((((({E,T,B},{F,Q},M)B,({C,R})L){N,B},(({G,T}){I,S},H,A){K,P})J)D)root;
+((((({E,T},{F,Q},M)G,({C,R})L)N,((B){I,S},{H,G},{A,K}){K,P})J)D)root;
+((((({T,Q},{F,E},M)B,(R){L,A})N,((G){I,S},H,A){K,P})J)D)root;
+((((({E,T,R},{F,Q},M){B,D},({C,R})L)N,((G){I,S},H,A){K,P,M})J)D)root;

@@ -1,0 +1,28 @@
+strict digraph G {
+	graph [name=G];
+	0	 [label=root];
+	1	 [label="D,L"];
+	0 -> 1;
+	2	 [label=J];
+	1 -> 2;
+	3	 [label=N];
+	2 -> 3;
+	7	 [label="I,S"];
+	2 -> 7;
+	9	 [label=A];
+	2 -> 9;
+	5	 [label=H];
+	3 -> 5;
+	6	 [label="L,R"];
+	3 -> 6;
+	10	 [label="E,T"];
+	5 -> 10;
+	11	 [label="F,Q"];
+	5 -> 11;
+	12	 [label=M];
+	5 -> 12;
+	13	 [label="C,R"];
+	6 -> 13;
+	14	 [label=G];
+	7 -> 14;
+}
