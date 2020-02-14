@@ -1,0 +1,3 @@
+dataout: 'simulated/cluster'
+tot_pb: 10
+simulate_params: '--labelswap 2 --noderemove 1 --labelremove 4 --labelduplication 2 --nodeswap 1 --totoperations=3'
