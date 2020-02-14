@@ -1,5 +1,4 @@
 # NOTE: use --configfile to specify the yaml of configs
-# NOTE: run with --restart-times 5 because similations will fail
 
 import re
 import numpy as np
@@ -33,20 +32,6 @@ def build_calc_files(tool_name):
 
     return files_lst
 
-
-# rule plot_all:
-#     output: data_path + '/heatmaps.pdf'
-#     input:
-#         expand(data_path + '/{tool}/results.csv',
-#                tool=mp3 + stereodist_tool + mlted)
-#     params:
-#         names = ' '.join(mp3 + stereodist_tool + mlted)
-#     shell:
-#         """
-#         python3 plot_heatmaps.py \
-#             --csv {input} --names {params.names} \
-#             -o {output}
-#         """
 
 rule run_all:
     input:
