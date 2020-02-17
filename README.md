@@ -35,7 +35,7 @@ This will produce the file `simulated/node_ascend/plot.pdf`.
 ```bash
 snakemake -s run_duplication.smk run_all
 ```
-This will produce CSV of the heatmaps for every tool in the format of `simulated/duplicstion/[TOOL]_pbp[1-5]/results.csv`
+This will produce CSV of the heatmaps for every tool in the format of `simulated/duplication/[TOOL]_pbp[1-5]/results.csv`
 
 ## Run experimental configurations 1, 2 and clustering
 ```bash
@@ -46,3 +46,9 @@ snakemake -s run_configs.smk --configfile cluster.yaml
 
 This will produce CSV of the heatmaps for every tool in the format of `simulated/config[N]/[TOOL]/results.csv` and `simulated/cluster/[TOOL]/results.csv`.
 
+## Run on real data
+```bash
+cd real
+chomd +x run_exps.sh
+./run_exps.sh
+```
