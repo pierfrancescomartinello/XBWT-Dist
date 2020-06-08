@@ -1,0 +1,8 @@
+(((XXX,A)B,(F,E)J)O,((N,I)K,(D,C)L)H)root;
+(((A,XXX)B,(F,E)J)O,((N,I)K,(D,C)L)H)root;
+(((A,F)B,(XXX,E)J)O,((N,I)K,(D,C)L)H)root;
+(((A,F)B,(E,XXX)J)O,((N,I)K,(D,C)L)H)root;
+(((A,F)B,(E,N)J)O,((XXX,I)K,(D,C)L)H)root;
+(((A,F)B,(E,N)J)O,((I,XXX)K,(D,C)L)H)root;
+(((A,F)B,(E,N)J)O,((I,D)K,(XXX,C)L)H)root;
+(((A,F)B,(E,N)J)O,((I,D)K,(C,XXX)L)H)root;
