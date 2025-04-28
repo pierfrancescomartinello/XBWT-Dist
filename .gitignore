@@ -1,2 +1,12 @@
 .history
 .snakemake
+
+scripts/Esperimenti/*
+scripts/.venv/*
+scripts/venv/*
+scripts/__pycache__/*
+scripts/dxbw.txt
+scripts/mp3treesim.txt
+
+.vscode/*
+ENV_DIR/*
