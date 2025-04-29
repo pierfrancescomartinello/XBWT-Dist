@@ -24,7 +24,9 @@ import svgling
 import nltk
 import os
 import graphviz
-os.environ["PATH"] = "C:\\Program Files\\Graphviz\\bin" + os.pathsep + os.getenv("PATH")
+
+if os.name == 'nt':
+    os.environ["PATH"] = os.join("C:\\Program Files\\Graphviz\\bin", os.getenv("PATH"))
 
 sub = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 
@@ -818,7 +820,7 @@ def Plot_Exp2(xdata, ydata, title, xlabel, ylabel, numexp, prelabel, savepath):
 
     plt.scatter(xdata, ydata, color='r', zorder=2, s=2)
     plt.plot(xdata, ydata, color='c', zorder=1)
-    path = savepath+"\\"+prelabel+"_"+str(numexp)+"_PLOT.png"
+    path = os.path.join(savepath,prelabel+"_"+str(numexp)+"_PLOT.png")
     plt.savefig(path, dpi=1000, bbox_inches='tight')
     plt.show()
 
@@ -927,7 +929,7 @@ print(xbw2)
 #print("Distanza: ", distance)
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi sottoalberi"
+path = os.path.join(os.getcwd(),"Esperimenti","Scambi sottoalberi")
 print(path)
 
 # Scambi di sottoalberi
@@ -935,7 +937,7 @@ print("ESPERIMENTI - SCAMBI SOTTOALBERI 1")
 dictAverage={}
 dictSwaps= {}
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)           
@@ -950,8 +952,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -972,7 +974,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Plot_Exp(swaps_array, distances, "ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT", newpath)
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+f3 = open(os.path.join(path+"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -990,7 +992,7 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi sottoalberi 2"
+path = os.path.join(os.getcwd(),"Esperimenti","Scambi sottoalberi 2")
 print(path)
 
 # Scambi di sottoalberi
@@ -998,7 +1000,7 @@ print("ESPERIMENTI - SCAMBI SOTTOALBERI")
 dictAverage={}
 dictSwaps= {}
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)           
@@ -1013,8 +1015,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 2*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -1036,7 +1038,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     #f.write("-------------------------------------------------------")
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 2 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -1054,7 +1056,7 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi sottoalberi 3"
+path = os.path.join(os.getcwd()+"Esperimenti","Scambi sottoalberi 3")
 print(path)
 
 # Scambi di sottoalberi
@@ -1062,7 +1064,7 @@ print("ESPERIMENTI - SCAMBI SOTTOALBERI")
 dictAverage={}
 dictSwaps= {}
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)           
@@ -1077,8 +1079,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 3*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -1100,7 +1102,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     #f.write("-------------------------------------------------------")
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 3 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -1118,7 +1120,7 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi sottoalberi 4"
+path = os.path.join(os.getcwd()+"Esperimenti","Scambi sottoalberi 4")
 print(path)
 
 # Scambi di sottoalberi
@@ -1126,7 +1128,7 @@ print("ESPERIMENTI - SCAMBI SOTTOALBERI")
 dictAverage={}
 dictSwaps= {}
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)           
@@ -1141,8 +1143,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 4*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -1164,7 +1166,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     #f.write("-------------------------------------------------------")
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 4 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -1182,19 +1184,19 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi simboli"
+path = os.path.join(os.getcwd(),"Esperimenti","Scambi simboli")
 print(path)
 
 # Scambi di simboli
 print("ESPERIMENTI - SCAMBI SIMBOLI")
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)           
     tree2, swaps, maxDegFor2, pcSwaps, rem = Swap_Symbols(tree, 15)
     real_distance = Xbwt_Edit_Distance(tree, tree2)
-    f= open(newpath+"\EXP_SS_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SS_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SIMBOLI *****\n\n")
     f.write("Numero simboli scambiati: "+str(swaps*2)+"\n")
     f.write("Max degree per 2 per ogni coppia di simboli scambiati: "+str(maxDegFor2)+"\n")
@@ -1217,7 +1219,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
 
 """
 numero_esperimenti = 2
-path = os.getcwd()+"\Esperimenti 2\Etichette multiple"
+path = os.path.join(os.getcwd(),"Esperimenti 2","Etichette multiple")
 
 for e in tqdm(range(1, numero_esperimenti+1)):
     num_labels = random.randint(2, 9)
@@ -1228,7 +1230,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
         for j in range(4):
             new_alphabet.append(new_alphabet[i])
     random.shuffle(new_alphabet)
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(new_alphabet)
@@ -1238,7 +1240,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Draw_Tree2(t1, e, "", newpath)
     Draw_Tree2(t2, e, "2", newpath)
     asp_distance = 2*swaps
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1 (ETICHETTE MULTIPLE) *****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Distanza aspettata: "+str(asp_distance)+"\n")
@@ -1249,10 +1251,10 @@ for e in tqdm(range(1, numero_esperimenti+1)):
 
 """
 numero_esperimenti = 200
-path = os.getcwd()+"\Esperimenti 3\Confronto alberi casuali"
-f1 = open(path+"\\Riepilogo.txt", "w+")
+path = os.path.join(os.getcwd(),"Esperimenti 3","Confronto alberi casuali")
+f1 = open(os.path.join(path,"Riepilogo.txt"), "w+")
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(alphabet)
@@ -1261,7 +1263,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     t2 = Export_Tree3(tree2, newpath, "2")
     Draw_Tree2(t1, e, "", newpath)
     Draw_Tree2(t2, e, "2", newpath)
-    f= open(newpath+"\EXP_RTC_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.open(newpath,"EXP_RTC_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - CONFRONTO ALBERI CASUALI CON LE STESSE ETICHETTE *****\n\n")
     dist = Xbwt_Edit_Distance(tree, tree2)
     f.write("Distanza ottenuta: "+str(dist)+"\n")
@@ -1272,10 +1274,10 @@ f1.close()
 
 """
 numero_esperimenti = 200
-path = os.getcwd()+"\Esperimenti 3\Confronto alberi casuali con dimensione inferiore"
-f1 = open(path+"\\Riepilogo.txt", "w+")
+path = os.path.join(os.getcwd(),"Esperimenti 3","Confronto alberi casuali con dimensione inferiore")
+f1 = open(os.path.join(path,"Riepilogo.txt"), "w+")
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -1286,7 +1288,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     t2 = Export_Tree3(tree2, newpath, "2")
     Draw_Tree2(t1, e, "", newpath)
     Draw_Tree2(t2, e, "2", newpath)
-    f= open(newpath+"\EXP_RTC_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_RTC_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - CONFRONTO ALBERI CASUALI CON LE STESSE ETICHETTE *****\n\n")
     dist = Xbwt_Edit_Distance(tree, tree2)
     f.write("Distanza ottenuta: "+str(dist)+"\n")
@@ -1297,10 +1299,10 @@ f1.close()
 
 """
 numero_esperimenti = 200
-path = os.getcwd()+"\Esperimenti 3\Confronto alberi casuali con dimensione superiore"
-f1 = open(path+"\\Riepilogo.txt", "w+")
+path = os.path.join(os.getcwd(),"Esperimenti 3","Confronto alberi casuali con dimensione superiore")
+f1 = open(os.path.join(path,"Riepilogo.txt"), "w+")
 for e in tqdm(range(1, numero_esperimenti+1)):
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     alphabet = ["A", "B", "C", "D", "E"]
@@ -1311,7 +1313,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     t2 = Export_Tree3(tree2, newpath, "2")
     Draw_Tree2(t1, e, "", newpath)
     Draw_Tree2(t2, e, "2", newpath)
-    f= open(newpath+"\EXP_RTC_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_RTC_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - CONFRONTO ALBERI CASUALI CON LE STESSE ETICHETTE *****\n\n")
     dist = Xbwt_Edit_Distance(tree, tree2)
     f.write("Distanza ottenuta: "+str(dist)+"\n")
@@ -1351,7 +1353,7 @@ def Remove_Subtrees2(T, maxRem, path):
     firstEmptySubtreeIndex = list(subtrees_dim).index(0)
     # print(firstEmptySubtreeIndex)
     posSubtree = random.randint(1, firstEmptySubtreeIndex-1)
-    f = open(path+"\\SUBTREES_REMOVED.txt", "w+")
+    f = open(os.path.join(path,"SUBTREES_REMOVED.txt"), "w+")
     f.write("SOTTOALBERI RIMOSSI\n\n")
     f.write(str(subtrees[posSubtree][0][0].getLabel())+"\n")
     for e in subtrees[posSubtree]:
@@ -1804,7 +1806,7 @@ def Swap_Subtrees3_2(T):
 numero_esperimenti = 50
 
 
-path = os.getcwd()+"\Esperimenti etichette multiple\Rimozioni"
+path = os.path.join(os.getcwd(),"Esperimenti etichette multiple","Rimozioni")
 print(path)
 
 # Rimozioni
@@ -1817,7 +1819,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
         for j in range(2):
             new_alphabet.append(new_alphabet[i])
     random.shuffle(new_alphabet)
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(new_alphabet)
@@ -1828,8 +1830,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Draw_Tree2(t2, e, "2", newpath)
     asp_distance = sum(size_sub_rem)
     real_distance = Xbwt_Edit_Distance2(tree, tree2)
-    f= open(newpath+"\EXP_REM_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_REM_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_REM_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_REM_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - RIMOZIONI SOTTOALBERI CON ETICHETTE MULTIPLE *****\n\n")
     f.write("Dimensione albero 1: "+str(len(tree.getNodes()))+"\n")
     f.write("Numero sottoalberi rimossi: "+str(removals)+"\n")
@@ -1848,7 +1850,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
 """
 
 """
-path = os.getcwd()+"\Esperimenti etichette multiple\Scambi sottoalberi"
+path = os.path.join(os.getcwd(),"Esperimenti etichette multiple","Scambi sottoalberi")
 print(path)
 
 # Scambi di sottoalberi
@@ -1863,7 +1865,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
         for j in range(2): # 3 ripetizioni
             new_alphabet.append(new_alphabet[i])
     random.shuffle(new_alphabet)
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(new_alphabet)           
@@ -1878,8 +1880,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -1900,7 +1902,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Plot_Exp(swaps_array, distances, "ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT", newpath)
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -1918,7 +1920,7 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti etichette multiple\Scambi sottoalberi 2"
+path = os.path.join(os.getcwd(),"Esperimenti etichette multiple","Scambi sottoalberi 2")
 print(path)
 
 # Scambi di sottoalberi
@@ -1933,7 +1935,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
         for j in range(2):
             new_alphabet.append(new_alphabet[i])
     random.shuffle(new_alphabet)
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(new_alphabet)           
@@ -1948,8 +1950,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 2*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -1970,7 +1972,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Plot_Exp(swaps_array, distances, "ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 2", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT", newpath)
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 2 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")
@@ -1988,7 +1990,7 @@ f3.close()
 """
 
 """
-path = os.getcwd()+"\Esperimenti etichette multiple\Scambi sottoalberi 3"
+path = os.path.join(os.getcwd(),"Esperimenti etichette multiple","Scambi sottoalberi 3")
 print(path)
 
 # Scambi di sottoalberi
@@ -2003,7 +2005,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
         for j in range(2):
             new_alphabet.append(new_alphabet[i])
     random.shuffle(new_alphabet)
-    newpath = path+"\\"+str(e)
+    newpath = os.path.join(path,str(e))
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     tree = Generate_Random_Tree(new_alphabet)           
@@ -2018,8 +2020,8 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     for n in tree2.getNodes():
         if n.getLabel() != "$":
             dimTree2+=1
-    f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-    f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+    f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 3*****\n\n")
     f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
     f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -2040,7 +2042,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
     Plot_Exp(swaps_array, distances, "ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 3", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT", newpath)
     f.close()
     f2.close()
-f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
 f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 3 - DATI DA PLOTTARE (AVG) *****\n\n")
 f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
 f3.write("Numero di scambi | Somma misure | Media | Media 2\n")

@@ -30,7 +30,7 @@ def exportTreeToGraphviz(tree, out_prefix, folder_path, remove_dollars):
     else:
         nodes = tree.preorder(tree.getRoot())
     tot_nodes = len(tree.getNodes()) # Numero totale di nodi
-    final_path = (folder_path+"\\"+out_prefix).replace("\\", "/")
+    final_path = os.path.join(folder_path,out_prefix)
     g = Digraph('G') # Creo un grafo diretto
 
     # Etichetta della radice

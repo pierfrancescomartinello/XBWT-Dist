@@ -28,9 +28,9 @@ def Plot_Exp(xdata, ydata, title, xlabel, ylabel, numexp, prelabel, savepath):
     plt.scatter(xdata, ydata, color='r', zorder=2)
     plt.plot(xdata, ydata, color='c', zorder=1)
     if numexp == "":
-        path =  savepath+"\\"+prelabel+"_PLOT.png"
+        path = os.path.join(savepath,prelabel+"_PLOT.png")
     else:
-        path = savepath+"\\"+prelabel+"_"+str(numexp)+"_PLOT.png"
+        path = os.path.join(savepath,prelabel+"_"+str(numexp)+"_PLOT.png")
     plt.savefig(path, dpi=1000, bbox_inches='tight')
     plt.close()
     #plt.show()
@@ -51,7 +51,7 @@ def Plot_Exp2(xdata, ydata, title, xlabel, ylabel, numexp, prelabel, savepath):
 
     plt.scatter(xdata, ydata, color='r', zorder=2)
     plt.plot(xdata, ydata, color='c', zorder=1)
-    path = savepath+"\\"+prelabel
+    path = os.path.join(savepath,prelabel)
     if str(numexp) != "":
         path=path+"_"+str(numexp)
     path = path+"_PLOT.png"
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # # Rimozioni
     # print("ESPERIMENTI - RIMOZIONI SOTTOALBERI")
     # for e in tqdm(range(1, numero_esperimenti+1)):
-    #     newpath = path+"\\"+str(e)
+    #     newpath = os.path.join(path,str(e))
     #     if not os.path.exists(newpath):
     #         os.makedirs(newpath)
     #     tree = Generate_Random_Tree(alphabet)
@@ -78,9 +78,9 @@ if __name__ == "__main__":
     #     exportTreeToGraphviz(tree2, "tree2", newpath, True)
     #     asp_distance = sum(size_sub_rem)
     #     real_distance = Dxbw.dxbw(tree, tree2)
-    #     f= open(newpath+"\EXP_REM_"+str(e)+"_DETAILS.txt","w+")
-    #     f2 = open(newpath+"\EXP_REM_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
-    #     f3 = open(newpath+"\EXP_REM_DATA_TO_PLOT_MP3_"+str(e)+"_DETAILS.txt","w+")
+    #     f= open(os.path.join(newpath,"EXP_REM_"+str(e)+"_DETAILS.txt"),"w+")
+    #     f2 = open(os.path.join(newpath,"EXP_REM_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
+    #     f3 = open(os.path.join(newpath,"EXP_REM_DATA_TO_PLOT_MP3_"+str(e)+"_DETAILS.txt"),"w+")
     #     f.write("***** ESPERIMENTO "+str(e)+" - RIMOZIONI SOTTOALBERI *****\n\n")
     #     f.write("Dimensione albero 1: "+str(len(tree.getNodes()))+"\n")
     #     f.write("Numero sottoalberi rimossi: "+str(removals)+"\n")
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     #     Plot_Exp2(removals_array, distances_mp3, "ESPERIMENTO "+str(e)+" - RIMOZIONE SOTTOALBERI - MP3TREESIM", "NUMERO RIMOZIONI", "VALORE MISURA", e, "EXP_REM_MP3", newpath)
     #     Plot_Exp2(removals_array, [1-v for v in distances_mp3], "ESPERIMENTO "+str(e)+" - RIMOZIONE SOTTOALBERI - MP3TREESIM (REVERSE)", "NUMERO RIMOZIONI", "VALORE MISURA", e, "EXP_REM_REV_MP3", newpath)
 
-    path = os.path.dirname(os.path.abspath(__file__))+"\Esperimenti\Scambi sottoalberi"
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"Esperimenti","Scambi sottoalberi")
     print(path)
 
     # Scambi di sottoalberi
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     dictAverageMP3={}
     dictSwaps= {}
     for e in tqdm(range(1, numero_esperimenti+1)):
-        newpath = path+"\\"+str(e)
+        newpath = os.path.join(path,str(e))
         if not os.path.exists(newpath):
             os.makedirs(newpath)
         tree = Generate_Random_Tree(alphabet)           
@@ -125,9 +125,9 @@ if __name__ == "__main__":
         for n in tree2.getNodes():
             if n.getLabel() != "$":
                 dimTree2+=1
-        f= open(newpath+"\EXP_SST_"+str(e)+"_DETAILS.txt","w+")
-        f2 = open(newpath+"\EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
-        f4 = open(newpath+"\EXP_SST_MP3_DATA_TO_PLOT_MP3_"+str(e)+"_DETAILS.txt","w+")
+        f= open(os.path.join(newpath,"EXP_SST_"+str(e)+"_DETAILS.txt"),"w+")
+        f2 = open(os.path.join(newpath,"EXP_SST_DATA_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
+        f4 = open(os.path.join(newpath,"EXP_SST_MP3_DATA_TO_PLOT_MP3_"+str(e)+"_DETAILS.txt"),"w+")
         f.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1*****\n\n")
         f.write("Numero sottoalberi scambiati: "+str(swaps)+"\n")
         f.write("Misura aspettata: "+str(asp_distance)+"\n")
@@ -157,8 +157,8 @@ if __name__ == "__main__":
         for i in range(len(distances_mp3)):
             f4.write(str(swaps_array[i])+" "+str(distances_mp3[i])+"\n")
         f4.close()
-    f3 = open(path+"\EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
-    f5 = open(path+"\EXP_SST_DATA_MP3_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt","w+")
+    f3 = open(os.path.join(path,"EXP_SST_DATA_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
+    f5 = open(os.path.join(path,"EXP_SST_DATA_MP3_AVG_TO_PLOT_"+str(e)+"_DETAILS.txt"),"w+")
     f3.write("***** ESPERIMENTO "+str(e)+" - SCAMBI SOTTOALBERI 1 - DATI DA PLOTTARE (AVG) *****\n\n")
     f3.write("Numero di esperimenti: "+str(numero_esperimenti)+"\n\n")
     f3.write("Numero di scambi | Somma misure | Media | Media 2\n")

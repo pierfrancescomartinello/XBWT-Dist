@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+import os
 import random
 from XBWT import Node, Tree
 import Dxbw
@@ -104,7 +105,7 @@ def Remove_Subtrees(T, maxRem, path):
         posSubtree = random.randint(1, firstEmptySubtreeIndex-1)
         if (subtrees_dim[0] - subtrees_dim[posSubtree] > 2):
             break
-    f = open(path+"\\SUBTREES_REMOVED.txt", "w+")
+    f = open(os.path.join(path,"SUBTREES_REMOVED.txt"), "w+")
     f.write("SOTTOALBERI RIMOSSI\n\n")
     f.write(str(subtrees[posSubtree][0][0].getLabel())+"\n")
     for e in subtrees[posSubtree]:
@@ -173,8 +174,8 @@ def Remove_Subtrees(T, maxRem, path):
         distances.append(Dxbw.dxbw(T0, newTree))
         exportTreeToGraphviz(T0, "tree1", path, True)
         exportTreeToGraphviz(newTree, "tree2_int_"+str(removals), path, True)
-        p1 = path+"\\"+"tree1.gv"
-        p2 = path+"\\"+"tree2_int_"+str(removals)+".gv"
+        p1 = os.path.join(path, "tree1.gv")
+        p2 = os.path.join(path, "tree2_int_"+str(removals)+".gv")
         print("Path 2: ", p2)
         gv1 = mp3treesim.read_dotfile(p1)
         gv2 = mp3treesim.read_dotfile(p2)
@@ -328,8 +329,8 @@ def Swap_Subtrees(T, path):
 
                 exportTreeToGraphviz(T, "tree1", path, True)
                 exportTreeToGraphviz(newTree, "tree2_int_"+str(swaps), path, True)
-                p1 = path+"\\"+"tree1.gv"
-                p2 = path+"\\"+"tree2_int_"+str(swaps)+".gv"
+                p1 = os.path.join(path,"tree1.gv")
+                p2 = os.path.join(path,"tree2_int_"+str(swaps)+".gv")
                 gv1 = mp3treesim.read_dotfile(p1)
                 gv2 = mp3treesim.read_dotfile(p2)
                 distances_mp3.append(mp3treesim.similarity(gv1, gv2))
