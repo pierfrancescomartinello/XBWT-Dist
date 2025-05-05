@@ -179,10 +179,10 @@ class XBWT(object):
         return self.T
     
     def getInfo(self):
-        _, self.SA, _, _, self.Child = self.preorderTraversal(self.getTree().getRoot())
+        _, self.SA, _, _, self.Child = XBWT.preorderTraversal(self.getTree().getRoot())
         
-    
-    def preorderTraversal(self, root):
+    @staticmethod
+    def preorderTraversal(root):
         """ Visita in preordine di un albero k-ario """
 
         S_last = []  # 1 o 0 se il nodo è o non è il figlio più a destra del suo genitore
