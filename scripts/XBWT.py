@@ -82,16 +82,16 @@ class Node(object):
         if self.isRoot():
             return 0
         else:
-            return 1 + self.getParent.level()
+            return 1 + self.getParent().level()
 
     def isRightmost(self):
         """ 
         Return 1 if node is the rightmost children of the parent, 0
         otherwise
         """
-        length_parent = len(self.getParent.getChildren)
+        length_parent = len(self.getParent().getChildren())
         if length_parent != 0:
-            if (self.parent.getChildren[length_parent-1] == self):
+            if (self.getParent().getChildren()[length_parent-1] == self):
                 return 1
         return 0
 
