@@ -172,10 +172,16 @@ class XBWT(object):
 
     def __init__(self, T):
         self.T = T
+        self.SA =[]
+        self.Child = []
 
     def getTree(self):
         return self.T
-
+    
+    def getInfo(self):
+        _, self.SA, _, _, self.Child = self.preorderTraversal(self.getTree().getRoot())
+        
+    
     def preorderTraversal(self, root):
         """ Visita in preordine di un albero k-ario """
 
@@ -185,7 +191,7 @@ class XBWT(object):
         # Array di triple (etichetta nodo, livello, posizione del padre in IntNodes del nodo)
         IntNodes = []
         level = 0  # Tiene traccia del livello corrente di un nodo
-
+        Child = []
         index = 0  # Indice corrente dell'array IntNodes
         pos_sub = 0  # Posizioni da togliere a curr_index per trovare il padre di un nodo
         curr_index = 0  # Tiene traccia della posizione del padre di un nodo nell'array IntNodes
@@ -234,6 +240,7 @@ class XBWT(object):
                     currentPath += i.getLabel()
                     level += 1
                     S_alpha.append(i.getLabel())
+                    Child.append(len(i.getChildren()))
                     IntNodes.append((i.getLabel(), level, curr_index))
                     index += 1
                     curr_index = index
@@ -254,7 +261,7 @@ class XBWT(object):
                     curr_index = 1  # Il padre del prossimo nodo si troverà in posizione 1
                     pos_sub = 0
 
-        return S_last, S_alpha, S_pi, IntNodes
+        return S_last, S_alpha, S_pi, IntNodes, Child
 
     def computeIntNodesArray(self, root):
         """ 
