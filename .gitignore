@@ -1,12 +1,14 @@
 .history
 .snakemake
-
+.zed
+Esperimenti/*
 scripts/Esperimenti/*
 scripts/.venv/*
 scripts/venv/*
 scripts/__pycache__/*
 scripts/dxbw.txt
 scripts/mp3treesim.txt
+scripts/flag_experiment.py
 
 .vscode/*
 ENV_DIR/*
