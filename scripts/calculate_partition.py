@@ -71,5 +71,53 @@ def calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_
             #    Flagh = Flag
         Flagh = Flag
 
-    return Flagh, LCP
+    
+    return Flagh, [i if i != -1 else k for i in LCP]
+   
+def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[list[str]], alphabet:set[str]) -> list[int | float]:
+    index_list:list[int] = []
+    C:dict[str,int] = {c:0 for c in alphabet}
+    LCP_part:list[list[int]] = []
+    Flag_part:list[list[int]] = []
+    kn:list[int] = [0,0]
+    contributions:list[int | float] = []
+    
+    def dict_reset(dictionary):
+        return {c:0 for c in dictionary.keys()}
+            
+    for i, value in enumerate(LCP):
+        if i == 0 or value < LCP[i-1]:
+            index_list.append(i)
+    
+    index_list.append(len(LCP))
+    for i in range(len(index_list)-1):
+        # is LCP useful? I don't think so
+        LCP_part.append(LCP[index_list[i]:index_list[i+1]])
+        Flag_part.append(Flag[index_list[i]:index_list[i+1]])
+
+    #for partition in Flag_part:
+    #    for b in partition:
+        #        if (c:= SA[b][kn[b]]) != '$':
+            #            C[c] = C.get(c, 0) + (1 if b == 0 else -1)
+            #        kn[b]+=1
+            #    contributions.append(sum([abs(i) for i in C.values()]))
+            #    C.clear()
+    
+    for partition in Flag_part:
+        S:list[list[str]] = [[],[]]
+        for b in partition:
+            if (c:=SA[b][kn[b]]) != '$':
+                S[b].append(c)
+        
+        #Why is the distance this way?
+        contributions.append((len(set(S[0]+S[1]))-len(set(S[0])&set(S[1])))/len(set(S[0]+S[1])))
+    
+    
+    
+    print(LCP_part)
+    return contributions
+
+
+def calculate_distance(contributions:list[int]) -> int:
+    return sum(contributions)
     
