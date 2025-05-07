@@ -1,8 +1,5 @@
 from copy import deepcopy
 from collections import Counter
-from typing import overload
-
-from networkx.generators.interval_graph import interval_graph
 
 def calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> tuple[list[int], list[int]]:
     '''
@@ -86,15 +83,6 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
     
     def union(a:Counter, b:Counter)-> list:
         return [i for i in set(a.keys()).union(set(b.keys())) for _ in range(max(a.get(i,0), b.get(i,0)))]
-    
-    # def union(a:Counter, b:Counter)-> list[list[int]]:
-    #     elem:set = set(a.keys()).union(set(b.keys()))
-    #     print(elem)
-    #     toRet:list[list[int]] = [[],[]]
-    #     for i in elem:
-        #         toRet[0].extend([i]*(min(a.get(i,0), b.get(i,0))))
-        #         toRet[1].extend([i]*(max(a.get(i,0), b.get(i,0))))
-        #     return toRet
     
     def intersection(a:Counter, b:Counter) ->list:
         return [i for i in set(a.keys()).union(set(b.keys())) for _ in range(min(a.get(i,0), b.get(i,0)))]
