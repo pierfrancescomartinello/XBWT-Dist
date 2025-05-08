@@ -81,14 +81,16 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
     kn:list[int] = [0,0]
     contributions:list[float] = []
     
-    def union(a:Counter, b:Counter)-> list:
+    
+    # TODO: Consider substitution with https://pypi.org/project/multiset/
+    def multiset_union(a:Counter, b:Counter)-> list:
         return [i for i in set(a.keys()).union(set(b.keys())) for _ in range(max(a.get(i,0), b.get(i,0)))]
     
-    def intersection(a:Counter, b:Counter) ->list:
+    def multiset_intersection(a:Counter, b:Counter) ->list:
         return [i for i in set(a.keys()).union(set(b.keys())) for _ in range(min(a.get(i,0), b.get(i,0)))]
     
-    def dict_reset(dictionary):
-        return {c:0 for c in dictionary.keys()}
+    def dict_reset(d:dict)->dict:
+        return {c:0 for c in d.keys()}
             
     for i, value in enumerate(LCP):
         if i == 0 or value < LCP[i-1]:
@@ -108,8 +110,8 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
             C[b][c] = C[b].get(c,0) + 1
             kn[b]+=1
             
-        uni:list[int] = union(*C)
-        inter:list[int] = intersection(*C)
+        uni:list[int] = multiset_union(*C)
+        inter:list[int] = multiset_intersection(*C)
         contributions.append((len(uni) - len(inter))/len(uni))    
 
     return contributions
