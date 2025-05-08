@@ -1276,7 +1276,7 @@ class Node(object):
         self.children = []
         if children is not None:
             for child in children:
-                self.add_child(child)
+                self.addChild(child)
 
     def representation(self):
         label = self.getLabel()
@@ -1306,7 +1306,7 @@ class Node(object):
 
     def isLeaf(self):
         """ Check if the node is a leaf """
-        if len(self.children) == 0:
+        if len(self.getChildren()) == 0:
             return True
         else:
             return False
@@ -1316,16 +1316,16 @@ class Node(object):
         if self.isRoot():
             return 0
         else:
-            return 1 + self.parent.level()
+            return 1 + self.getParent().level()
 
     def isRightmost(self):
         """ 
         Return 1 if node is the rightmost children of the parent, 0
         otherwise
         """
-        length_parent = len(self.parent.children)
+        length_parent = len(self.getParent().getChildren())
         if length_parent != 0:
-            if (self.parent.children[length_parent-1] == self):
+            if (self.getParent().getChildren()[length_parent-1] == self):
                 return 1
         return 0
 
@@ -1333,7 +1333,7 @@ class Node(object):
         """ Add a child at node """
         node.parent = self
         assert isinstance(node, Node)
-        self.children.append(node)
+        self.getChildren().append(node)
 
     def getChildren(self):
         """ Return the children's array of a node"""
@@ -1440,7 +1440,7 @@ class XBWT(object):
             flag = 0
             # Caso 1: se l'elemento iniziale della pila è una foglia rimuovo
             # questo elemento dalla pila
-            if len((Stack[len(Stack)-1]).children) == 0:
+            if len((Stack[len(Stack)-1]).getChildren()) == 0:
                 Stack.pop()
                 currentPath = currentPath[:len(currentPath)-1]
                 level -= 1
@@ -1454,7 +1454,7 @@ class XBWT(object):
             # da sinistra a destra), inseriscilo nella pila e nel
             # vettore Preorder (nodi visitati). Quindi, ricomincia dal caso 1
             # per esplorare il nodo visitato.
-            for i in Par.children:
+            for i in Par.getChildren():
                 if i not in Preorder:
                     flag = 1
                     S_last.append(i.isRightmost())
