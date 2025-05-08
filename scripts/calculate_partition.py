@@ -76,7 +76,6 @@ def calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_
     return Flagh, [i if i != -1 else k for i in LCP]
 
 def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[list[str]], alphabet:set[str]) -> list[float]:
-    index_list:list[int] = []
     Flag_part:list[list[int]] = []
     kn:list[int] = [0,0]
     contributions:list[float] = []
@@ -92,11 +91,9 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
     def dict_reset(d:dict)->dict:
         return {c:0 for c in d.keys()}
             
-    for i, value in enumerate(LCP):
-        if i == 0 or value < LCP[i-1]:
-            index_list.append(i)
     
-    index_list.append(len(LCP))
+    index_list:list = [i for i,value in enumerate(LCP) if i == 0 or value < LCP[i-1]] + [len(LCP)]
+
     for i in range(len(index_list)-1):
         # is LCP useful? I don't think so
         # LCP_part.append(LCP[index_list[i]:index_list[i+1]])
