@@ -133,7 +133,6 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
         '''
         return [i for i in set(a.keys()).union(set(b.keys())) for _ in range(min(a.get(i,0), b.get(i,0)))]
     
-    
     def dict_reset(d:dict)->dict:
         '''
             A method to reset a dictionary
@@ -167,8 +166,10 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
         #Calculating the union and intersection of the multiset and using them to calculate the contribution
         uni:list[int] = multiset_union(*C)
         inter:list[int] = multiset_intersection(*C)
-        contributions.append((len(uni) - len(inter))/len(uni))    
-
+        try:
+            contributions.append((len(uni) - len(inter))/len(uni))    
+        except ZeroDivisionError:
+            contributions.append(0)
     return contributions
 
 
