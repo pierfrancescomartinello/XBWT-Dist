@@ -1376,7 +1376,7 @@ class Tree(object):
                 node.level = 1
         self.nodes.append(node)
     
-    def addDollarsToLeafs(self):
+    def addDollarsToLeaves(self):
         for r in [i for i in self.nodes if len(i.getChildren()) == 0]:
             doll = Node("$")
             self.insert(doll, r)
