@@ -1317,6 +1317,7 @@ class Node(object):
             return 0
         else:
             return (1 + self.getParent().level()) if self.getParent() is not None else 1
+            
     def isRightmost(self):
         """ 
         Return 1 if node is the rightmost children of the parent, 0
@@ -1374,7 +1375,14 @@ class Tree(object):
                 self.height = 1
                 node.level = 1
         self.nodes.append(node)
-
+    
+    def addDollarsToLeafs(self):
+        for r in [i for i in self.nodes if len(i.getChildren()) == 0]:
+            doll = Node("$")
+            self.insert(doll, r)
+            r.addChild(doll)
+        
+    
     def getRoot(self):
         """ Return the root of tree"""
         return self.root

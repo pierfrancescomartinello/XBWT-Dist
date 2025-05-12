@@ -147,9 +147,9 @@ def mp3TreeSimComp(treePath1, treePath2):
 def dxbwComp(treePath1, treePath2):
     f1= open("dxbw.txt","w+")
     tree1 = importTreeFromGraphviz(treePath1)
-    tree1.addDollarsToLeafs() # Aggiungo i dollari alle foglie
+    tree1.addDollarsToLeaves() # Aggiungo i dollari alle foglie
     tree2 = importTreeFromGraphviz(treePath2)
-    tree2.addDollarsToLeafs()
+    tree2.addDollarsToLeaves()
     f1.write(str(Dxbw.dxbw(tree1, tree2)))
     f1.close()
     print("\nConfronto completato, risultati disponibili in dxbw.txt!")
