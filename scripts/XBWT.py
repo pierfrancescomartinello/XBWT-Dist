@@ -626,7 +626,7 @@ def Swap_Subtrees(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -687,7 +687,7 @@ def Swap_Subtrees(T):
                 for node in newTree.getNodes():
                     parents = []
                     parent = node
-                    while parent.getParent() != None:
+                    while parent.getParent() is not None:
                         parents.append(parent.getParent())
                         parent = parent.getParent()
                     dictParents[node] = parents
@@ -708,7 +708,7 @@ def Swap_Subtrees(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -731,7 +731,7 @@ def Swap_Subtrees2(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -791,7 +791,7 @@ def Swap_Subtrees2(T):
             for node in newTree.getNodes():
                 parents = []
                 parent = node
-                while parent.getParent() != None:
+                while parent.getParent() is not None:
                     parents.append(parent.getParent())
                     parent = parent.getParent()
                 dictParents[node] = parents
@@ -812,7 +812,7 @@ def Swap_Subtrees2(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -835,7 +835,7 @@ def Swap_Subtrees3(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -895,7 +895,7 @@ def Swap_Subtrees3(T):
             for node in newTree.getNodes():
                 parents = []
                 parent = node
-                while parent.getParent() != None:
+                while parent.getParent() is not None:
                     parents.append(parent.getParent())
                     parent = parent.getParent()
                 dictParents[node] = parents
@@ -916,7 +916,7 @@ def Swap_Subtrees3(T):
                     dictSubtrees[st[0][0]] = st
                     parents = []
                     parent = st[0][0]
-                    while parent.getParent() != None:
+                    while parent.getParent() is not None:
                         parents.append(parent.getParent())
                         parent = parent.getParent()
                     dictParents[st[0][0]] = parents
@@ -942,7 +942,7 @@ def Swap_Subtrees3(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -1316,18 +1316,20 @@ class Node(object):
         if self.isRoot():
             return 0
         else:
-            return 1 + self.getParent().level()
-
+            return (1 + self.getParent().level()) if self.getParent() is not None else 1
     def isRightmost(self):
         """ 
         Return 1 if node is the rightmost children of the parent, 0
         otherwise
         """
-        length_parent = len(self.getParent().getChildren())
-        if length_parent != 0:
-            if (self.getParent().getChildren()[length_parent-1] == self):
-                return 1
-        return 0
+        if (par:=self.getParent() )is not None:
+            length_parent = len(par.getChildren())
+            if length_parent != 0:
+                if (par.getChildren()[length_parent-1] == self):
+                    return 1
+            return 0
+        else:
+            return 0
 
     def addChild(self, node):
         """ Add a child at node """
@@ -1341,6 +1343,11 @@ class Node(object):
 
     def setChildren(self, children):
         self.children = children
+        
+    
+    
+    def __repr__(self) -> str:
+        return self.label
 
 
 class Tree(object):
@@ -1357,9 +1364,15 @@ class Tree(object):
         if parent is not None:
             parent.addChild(node)
             self.edges.append((parent, node))
+            if parent.level == self.height:
+                self.height +=1
+                node.level = parent.level +1
+            
         else:
             if self.root is None:
                 self.root = node
+                self.height = 1
+                node.level = 1
         self.nodes.append(node)
 
     def getRoot(self):
@@ -1396,6 +1409,8 @@ class Tree(object):
                 result.extend(self.preorder(node))
         return [root] + result
 
+    def getHeight(self):
+        return self.height
 
 class XBWT(object):
 
@@ -1414,6 +1429,8 @@ class XBWT(object):
         # Array di triple (etichetta nodo, livello, posizione del padre in IntNodes del nodo)
         IntNodes = []
         level = 0  # Tiene traccia del livello corrente di un nodo
+
+        Child = [] # Keep track of the number of child of each node
 
         index = 0  # Indice corrente dell'array IntNodes
         pos_sub = 0  # Posizioni da togliere a curr_index per trovare il padre di un nodo
@@ -2073,8 +2090,34 @@ class XBWT(object):
                      IntNodes[IntNodes_Pos_Sort[i]][0], node_flag[IntNodes_Pos_Sort[i]]])))
         return S
     
+    
+    def get_SimplerXBWT(self):
+        '''
+            Get method to recall from comp_layer.py in order to fetch the necessary information for the computation of the Distance
+            
+            Args:
+                self: The reference to the object
+            
+            Returns:
+                SA: The array representing the labels of the XBWT
+                Child: The array representing the amount of children each node has
+                tree_height: The height of the tree
+        '''
+        
+        SA = self.preorderTraversal(self.getTree().getRoot())
+        
+        # Child è un po' più complicato
+        Child:list[int] = []
+        tree_height:int = self.getTree().getHeight()
+        
+        
+        
+        return SA, Child, tree_height
+        
+        ...
 
-# Creazione dei nodi dell'albero  
+# Commentato da Pierfrancesco
+'''# Creazione dei nodi dell'albero  
 tree = Tree()
 root = Node('A')
 node1 = Node('B')
@@ -2090,7 +2133,7 @@ tree.insert(node4, node3)
 
 xbwt = XBWT(tree)
 IntNodes, IntNodes_Pos_Sort = xbwt.pathSort(xbwt.getTree())
-print(IntNodes_Pos_Sort)
+print(IntNodes_Pos_Sort)'''
 
 """
 # Creazione dei nodi dell'albero  
@@ -2179,7 +2222,8 @@ S_pi = xbwt.Compute_Spi_Sort(IntNodes, IntNodes_Pos_Sort)
 #Xbwt_Edit_Distance(tree, tree)
 """
 
-#S_last, S_alpha, S_pi, IntNodes = xbwt.preorderTraversal(xbwt.getTree().getRoot())
+#Commentato da Pierfrancesco
+'''#S_last, S_alpha, S_pi, IntNodes = xbwt.preorderTraversal(xbwt.getTree().getRoot())
 #IntNodes = xbwt.computeIntNodesArray(xbwt.getTree().getRoot())
 
 
@@ -2212,7 +2256,7 @@ def Export_Tree(tree, path, label=""):
             f.write("tree"+label+".insert(" +
                     arrayDollars[j]+", "+dictNodes[e[0].getLabel()]+")\n")
             j += 1
-    f.close()
+    f.close()'''
 
 
 def Export_Tree2(tree, path, label=""):
@@ -2323,8 +2367,8 @@ def Draw_Tree2(tree, num_exp, label_tree, path):
     t1 = svgling.draw_tree(nltk.Tree.fromstring(tree))
     t1.get_svg().saveas(os.path.join(path,"tree"+label_tree+"_plot.svg"))
 
-
-numero_esperimenti = 50
+# Commentato da Pierfrancesco
+'''numero_esperimenti = 50'''
 
 """
 path = os.path.join(os.getcwd(),"Esperimenti","Rimozioni")
@@ -2655,8 +2699,8 @@ Plot_Exp2(final_swaps_array, avg_distances2, "ESPERIMENTO - SCAMBI SOTTOALBERI 3
 f3.close()
 """
 
-
-path = os.path.join(os.getcwd(),"Esperimenti","Scambi sottoalberi 4")
+# Commentato da Pierfrancesco
+'''path = os.path.join(os.getcwd(),"Esperimenti","Scambi sottoalberi 4")
 print(path)
 
 # Scambi di sottoalberi
@@ -2716,10 +2760,10 @@ for k in dictAverage.keys():
     f3.write(str(k)+" "+str(dictAverage[k])+" "+str(dictAverage[k]/numero_esperimenti)+" "+str(dictAverage[k]/dictSwaps[k])+"\n")
 Plot_Exp2(final_swaps_array, avg_distances, "ESPERIMENTO - SCAMBI SOTTOALBERI 4 (AVG)", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT_AVG", path)
 Plot_Exp2(final_swaps_array, avg_distances2, "ESPERIMENTO - SCAMBI SOTTOALBERI 4 (AVG) - 2", "NUMERO SCAMBI", "VALORE MISURA", e, "EXP_SBT_AVG_2", path)
-f3.close()
+f3.close()'''
 
 """
-path = os.getcwd()+"\Esperimenti\Scambi simboli"
+path = os.getcwd()+"\\Esperimenti\\Scambi simboli"
 print(path)
 
 # Scambi di simboli
@@ -2754,7 +2798,7 @@ for e in tqdm(range(1, numero_esperimenti+1)):
 
 """
 numero_esperimenti = 2
-path = os.getcwd()+"\Esperimenti 2\Etichette multiple"
+path = os.getcwd()+"\\Esperimenti 2\\Etichette multiple"
 
 for e in tqdm(range(1, numero_esperimenti+1)):
     num_labels = random.randint(2, 9)
@@ -3014,7 +3058,7 @@ def Swap_Subtrees2(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -3075,7 +3119,7 @@ def Swap_Subtrees2(T):
                 for node in newTree.getNodes():
                     parents = []
                     parent = node
-                    while parent.getParent() != None:
+                    while parent.getParent() is not None:
                         parents.append(parent.getParent())
                         parent = parent.getParent()
                     dictParents[node] = parents
@@ -3096,7 +3140,7 @@ def Swap_Subtrees2(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -3119,7 +3163,7 @@ def Swap_Subtrees2_2(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -3179,7 +3223,7 @@ def Swap_Subtrees2_2(T):
             for node in newTree.getNodes():
                 parents = []
                 parent = node
-                while parent.getParent() != None:
+                while parent.getParent() is not None:
                     parents.append(parent.getParent())
                     parent = parent.getParent()
                 dictParents[node] = parents
@@ -3200,7 +3244,7 @@ def Swap_Subtrees2_2(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -3223,7 +3267,7 @@ def Swap_Subtrees3_2(T):
             dictSubtrees[st[0][0]] = st
             parents = []
             parent = st[0][0]
-            while parent.getParent() != None:
+            while parent.getParent() is not None:
                 parents.append(parent.getParent())
                 parent = parent.getParent()
             dictParents[st[0][0]] = parents
@@ -3283,7 +3327,7 @@ def Swap_Subtrees3_2(T):
             for node in newTree.getNodes():
                 parents = []
                 parent = node
-                while parent.getParent() != None:
+                while parent.getParent() is not None:
                     parents.append(parent.getParent())
                     parent = parent.getParent()
                 dictParents[node] = parents
@@ -3304,7 +3348,7 @@ def Swap_Subtrees3_2(T):
                     dictSubtrees[st[0][0]] = st
                     parents = []
                     parent = st[0][0]
-                    while parent.getParent() != None:
+                    while parent.getParent() is not None:
                         parents.append(parent.getParent())
                         parent = parent.getParent()
                     dictParents[st[0][0]] = parents
@@ -3330,7 +3374,7 @@ def Swap_Subtrees3_2(T):
 
     """
     for node in preorder:
-        if node.getParent()!= None:
+        if node.getParent()is not None:
             print(node.getLabel(), node.getParent().getLabel())
         else:
             print(node.getLabel())
@@ -3339,7 +3383,8 @@ def Swap_Subtrees3_2(T):
     return newTree, swaps, swaps_array, distances
 
 
-numero_esperimenti = 50
+# Commentato da Pierfrancesco
+'''numero_esperimenti = 50'''
 
 """
 path = os.path.join(os.getcwd(),"Esperimenti etichette multiple","Rimozioni")
