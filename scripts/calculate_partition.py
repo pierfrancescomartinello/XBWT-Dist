@@ -1,7 +1,7 @@
 from copy import deepcopy
 from collections import Counter
 
-def calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> tuple[list[int], list[int]]:
+def __calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> tuple[list[int], list[int]]:
     '''
     Calculates the necessary structures to compute the distance described in Dolce et Al.,2024
    
@@ -77,8 +77,7 @@ def calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_
     
     return Flagh, [i if i != -1 else k for i in LCP]
 
-
-def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[list[str]], alphabet:set[str]) -> list[float]:
+def __calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[list[str]], alphabet:set[str]) -> list[float]:
     '''
     Calculates how much each set of the partition contributes to the final pseudometric.
     The contribution (calculated following Dolce et Al, 2024) is calculated starting from the Jaccard distance
@@ -172,8 +171,7 @@ def calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[lis
             contributions.append(0)
     return contributions
 
-
-def calculate_distance(contributions:list[float]) -> float:
+def __calculate_distance(contributions:list[float]) -> float:
     '''
         A simple wrapper of the sum function.
         Useful should the definition be modified in future
@@ -186,6 +184,35 @@ def calculate_distance(contributions:list[float]) -> float:
     '''
     return sum(contributions)
     
-
-
-
+def calculate_Dolce_distance(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> float:
+    '''
+        This function is responsible to calculate the Dolce distance between two XBWTs. 
+        The function fetches the return data from one part of the pipeline and gives it to the next
+        
+        Calculate Flag and LCP_k -> Calculate the contribution of each multiset -> Calculate the distance
+        
+        Args:
+            SA (tuple of lists of string):  The arrays SA0 and SA1, representing the labels of the two XBWTs
+            Child (tuple of lists of int):  The arrays Child0 and Child1, representing the number of children each node in the two XBWTs has
+            F (dictionary of str and int):  The dictionary that gives the indexes on where in the fictitious merged XBWT the prefixes 
+                                            that start with a particular character must be placed
+            n_0 (int): The size of SA0
+            n_1 (int): The size of SA1
+        
+        Returns:
+            distance (float):   The distance, bound between 0 (the two XBWTs are identical)
+                                and |P_k| (the cardinality of the partition of order k, when the two XBWTs are completely different) 
+    '''
+    
+    # Definitions of the two most important variables
+    Flag:list[int]
+    LCP:list[int]
+    
+    # Calling the function responsible to assign Flag and LCP correcly
+    Flag, LCP = __calculate_ds(SA, Child, F, n_0, n_1, k)
+    
+    # Calling the function responsible to calculate the contributions
+    contributions:list[float] = __calculate_partition_contributions(Flag, LCP, SA, set(F.keys()))
+    
+    # Finally the distance can be calculated from the contributions (right now is a wrapper of the sum function)
+    return __calculate_distance(contributions)
