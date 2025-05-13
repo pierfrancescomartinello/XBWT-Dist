@@ -1380,9 +1380,7 @@ class Tree(object):
         for r in [i for i in self.nodes if len(i.getChildren()) == 0]:
             doll = Node("$")
             self.insert(doll, r)
-            r.addChild(doll)
         
-    
     def getRoot(self):
         """ Return the root of tree"""
         return self.root
@@ -2292,7 +2290,7 @@ def Export_Tree2(tree, path, label=""):
 
 
 def Export_Tree3(tree, path, label=""):
-    f = open(pathlabel+".txt", "w+")
+    f = open(path+".txt", "w+")
     root = tree.getRoot()
     representation = str(root.representation())
     representation = representation.replace(",", "")
@@ -3051,48 +3049,153 @@ def Remove_Subtrees2(T, maxRem, path):
         # print(newTree.preorder(newTree.getRoot()))
     return newTree, removals, size_sub_rem, removals_array, distances
 
-
-def Swap_Subtrees2(T):
-    #nswaps = random.randint(1, maxSwaps)
-    distances = []
-    swaps_array = []
-    newTree = copy.deepcopy(T)
-    subtrees = get_all_subtree(newTree)
-    dictSubtrees = {}
-    dictParents = {}
-    # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
-    for st in subtrees[1:len(subtrees)]:
-        if len(st) > 0:
-            dictSubtrees[st[0][0]] = st
-            parents = []
-            parent = st[0][0]
-            while parent.getParent() is not None:
-                parents.append(parent.getParent())
-                parent = parent.getParent()
-            dictParents[st[0][0]] = parents
-    exchangeable = []
-    keys = list(dictSubtrees.keys())
-    i = 1
-    # Ricavo i sottoalberi scambiabili
-    for key in keys:
-        if i <= len(keys)-2:
-            for k in keys[i:]:
-                if key not in dictParents[k]:
-                    exchangeable.append([key, k])
-        i += 1
-    dictExchanged = {}
-    for k in keys:
-        dictExchanged[k] = False
-    random.shuffle(exchangeable)
-    swaps = 0
-    i = 0
-    nswaps = len(exchangeable)
-    while swaps < nswaps and i < len(exchangeable):
-        pair = exchangeable[i]
-        if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
+#Should you need this function, just change the if condition to True
+if False:
+    def Swap_Subtrees2(T):
+        #nswaps = random.randint(1, maxSwaps)
+        distances = []
+        swaps_array = []
+        newTree = copy.deepcopy(T)
+        subtrees = get_all_subtree(newTree)
+        dictSubtrees = {}
+        dictParents = {}
+        # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
+        for st in subtrees[1:len(subtrees)]:
+            if len(st) > 0:
+                dictSubtrees[st[0][0]] = st
+                parents = []
+                parent = st[0][0]
+                while parent.getParent() is not None:
+                    parents.append(parent.getParent())
+                    parent = parent.getParent()
+                dictParents[st[0][0]] = parents
+        exchangeable = []
+        keys = list(dictSubtrees.keys())
+        i = 1
+        # Ricavo i sottoalberi scambiabili
+        for key in keys:
+            if i <= len(keys)-2:
+                for k in keys[i:]:
+                    if key not in dictParents[k]:
+                        exchangeable.append([key, k])
+            i += 1
+        dictExchanged = {}
+        for k in keys:
+            dictExchanged[k] = False
+        random.shuffle(exchangeable)
+        swaps = 0
+        i = 0
+        nswaps = len(exchangeable)
+        while swaps < nswaps and i < len(exchangeable):
+            pair = exchangeable[i]
+            if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
+                if pair[1] not in dictParents[pair[0]] and pair[0] not in dictParents[pair[1]]:
+                    print("Sto scambiando: ",
+                        pair[0].getLabel(), pair[1].getLabel())
+                    swaps += 1
+                    dictExchanged[pair[0]] = True
+                    dictExchanged[pair[1]] = True
+                    p1 = pair[0].getParent()
+                    tmp = p1.getChildren()
+                    for j in range(0, len(tmp)):
+                        if tmp[j] == pair[0]:
+                            tmp[j] = pair[1]
+                            break
+                    p1.setChildren(tmp)
+                    p2 = pair[1].getParent()
+                    tmp = p2.getChildren()
+                    if p2 == pair[0].getParent():
+                        # Nel caso in cui sto scambiando fratelli
+                        flag = False
+                        for j in range(0, len(tmp)):
+                            if tmp[j] == pair[1]:
+                                if flag:
+                                    tmp[j] = pair[0]
+                                    break
+                                flag = True
+                    else:
+                        for j in range(0, len(tmp)):
+                            if tmp[j] == pair[1]:
+                                tmp[j] = pair[0]
+                                break
+                    p2.setChildren(tmp)
+                    pair[0].setParent(p2)
+                    pair[1].setParent(p1)
+    
+                    # Aggiorno gli antenati per ogni nodo
+                    for node in newTree.getNodes():
+                        parents = []
+                        parent = node
+                        while parent.getParent() is not None:
+                            parents.append(parent.getParent())
+                            parent = parent.getParent()
+                        dictParents[node] = parents
+    
+                        newEdges = []
+                        preorder = newTree.preorder(newTree.getRoot())
+                        for n in preorder:
+                            for c in n.getChildren():
+                                newEdges.append((n, c))
+                        newTree.setEdges(newEdges)
+    
+                    swaps_array.append(swaps)
+                    distances.append(Xbwt_Edit_Distance2(T, newTree))
+    
+            i += 1
+        #print("Numero di scambi effettuati: ", swaps)
+        # print(newTree.preorder(newTree.getRoot()))
+    
+        """
+        for node in preorder:
+            if node.getParent()is not None:
+                print(node.getLabel(), node.getParent().getLabel())
+            else:
+                print(node.getLabel())
+        """
+    
+        return newTree, swaps, swaps_array, distances
+    
+    
+    def Swap_Subtrees2_2(T):
+        #nswaps = random.randint(1, maxSwaps)
+        distances = []
+        swaps_array = []
+        newTree = copy.deepcopy(T)
+        subtrees = get_all_subtree(newTree)
+        dictSubtrees = {}
+        dictParents = {}
+        # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
+        for st in subtrees[1:len(subtrees)]:
+            if len(st) > 0:
+                dictSubtrees[st[0][0]] = st
+                parents = []
+                parent = st[0][0]
+                while parent.getParent() is not None:
+                    parents.append(parent.getParent())
+                    parent = parent.getParent()
+                dictParents[st[0][0]] = parents
+        exchangeable = []
+        keys = list(dictSubtrees.keys())
+        i = 1
+        # Ricavo i sottoalberi scambiabili
+        for key in keys:
+            if i <= len(keys)-2:
+                for k in keys[i:]:
+                    if key not in dictParents[k]:
+                        exchangeable.append([key, k])
+            i += 1
+        dictExchanged = {}
+        for k in keys:
+            dictExchanged[k] = False
+        random.shuffle(exchangeable)
+        swaps = 0
+        i = 0
+        nswaps = 10  # Numero di scambi da effettuare
+        while swaps < nswaps and i < len(exchangeable):
+            pair = exchangeable[i]
+            # if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
             if pair[1] not in dictParents[pair[0]] and pair[0] not in dictParents[pair[1]]:
-                print("Sto scambiando: ",
-                      pair[0].getLabel(), pair[1].getLabel())
+                print("Sto scambiando: ", pair[0].getLabel(), pair[1].getLabel())
                 swaps += 1
                 dictExchanged[pair[0]] = True
                 dictExchanged[pair[1]] = True
@@ -3122,7 +3225,7 @@ def Swap_Subtrees2(T):
                 p2.setChildren(tmp)
                 pair[0].setParent(p2)
                 pair[1].setParent(p1)
-
+    
                 # Aggiorno gli antenati per ogni nodo
                 for node in newTree.getNodes():
                     parents = []
@@ -3131,264 +3234,162 @@ def Swap_Subtrees2(T):
                         parents.append(parent.getParent())
                         parent = parent.getParent()
                     dictParents[node] = parents
-
-                    newEdges = []
-                    preorder = newTree.preorder(newTree.getRoot())
-                    for n in preorder:
-                        for c in n.getChildren():
-                            newEdges.append((n, c))
-                    newTree.setEdges(newEdges)
-
+    
+                newEdges = []
+                preorder = newTree.preorder(newTree.getRoot())
+                for n in preorder:
+                    for c in n.getChildren():
+                        newEdges.append((n, c))
+                newTree.setEdges(newEdges)
+    
                 swaps_array.append(swaps)
                 distances.append(Xbwt_Edit_Distance2(T, newTree))
-
-        i += 1
-    #print("Numero di scambi effettuati: ", swaps)
-    # print(newTree.preorder(newTree.getRoot()))
-
-    """
-    for node in preorder:
-        if node.getParent()is not None:
-            print(node.getLabel(), node.getParent().getLabel())
-        else:
-            print(node.getLabel())
-    """
-
-    return newTree, swaps, swaps_array, distances
-
-
-def Swap_Subtrees2_2(T):
-    #nswaps = random.randint(1, maxSwaps)
-    distances = []
-    swaps_array = []
-    newTree = copy.deepcopy(T)
-    subtrees = get_all_subtree(newTree)
-    dictSubtrees = {}
-    dictParents = {}
-    # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
-    for st in subtrees[1:len(subtrees)]:
-        if len(st) > 0:
-            dictSubtrees[st[0][0]] = st
-            parents = []
-            parent = st[0][0]
-            while parent.getParent() is not None:
-                parents.append(parent.getParent())
-                parent = parent.getParent()
-            dictParents[st[0][0]] = parents
-    exchangeable = []
-    keys = list(dictSubtrees.keys())
-    i = 1
-    # Ricavo i sottoalberi scambiabili
-    for key in keys:
-        if i <= len(keys)-2:
-            for k in keys[i:]:
-                if key not in dictParents[k]:
-                    exchangeable.append([key, k])
-        i += 1
-    dictExchanged = {}
-    for k in keys:
-        dictExchanged[k] = False
-    random.shuffle(exchangeable)
-    swaps = 0
-    i = 0
-    nswaps = 10  # Numero di scambi da effettuare
-    while swaps < nswaps and i < len(exchangeable):
-        pair = exchangeable[i]
-        # if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
-        if pair[1] not in dictParents[pair[0]] and pair[0] not in dictParents[pair[1]]:
-            print("Sto scambiando: ", pair[0].getLabel(), pair[1].getLabel())
-            swaps += 1
-            dictExchanged[pair[0]] = True
-            dictExchanged[pair[1]] = True
-            p1 = pair[0].getParent()
-            tmp = p1.getChildren()
-            for j in range(0, len(tmp)):
-                if tmp[j] == pair[0]:
-                    tmp[j] = pair[1]
-                    break
-            p1.setChildren(tmp)
-            p2 = pair[1].getParent()
-            tmp = p2.getChildren()
-            if p2 == pair[0].getParent():
-                # Nel caso in cui sto scambiando fratelli
-                flag = False
-                for j in range(0, len(tmp)):
-                    if tmp[j] == pair[1]:
-                        if flag:
-                            tmp[j] = pair[0]
-                            break
-                        flag = True
+    
+            i += 1
+        #print("Numero di scambi effettuati: ", swaps)
+        # print(newTree.preorder(newTree.getRoot()))
+    
+        """
+        for node in preorder:
+            if node.getParent()is not None:
+                print(node.getLabel(), node.getParent().getLabel())
             else:
-                for j in range(0, len(tmp)):
-                    if tmp[j] == pair[1]:
-                        tmp[j] = pair[0]
-                        break
-            p2.setChildren(tmp)
-            pair[0].setParent(p2)
-            pair[1].setParent(p1)
-
-            # Aggiorno gli antenati per ogni nodo
-            for node in newTree.getNodes():
+                print(node.getLabel())
+        """
+    
+        return newTree, swaps, swaps_array, distances
+    
+    
+    def Swap_Subtrees3_2(T):
+        #nswaps = random.randint(1, maxSwaps)
+        distances = []
+        swaps_array = []
+        newTree = copy.deepcopy(T)
+        subtrees = get_all_subtree(newTree)
+        dictSubtrees = {}
+        dictParents = {}
+        # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
+        for st in subtrees[1:len(subtrees)]:
+            if len(st) > 0:
+                dictSubtrees[st[0][0]] = st
                 parents = []
-                parent = node
+                parent = st[0][0]
                 while parent.getParent() is not None:
                     parents.append(parent.getParent())
                     parent = parent.getParent()
-                dictParents[node] = parents
-
-            newEdges = []
-            preorder = newTree.preorder(newTree.getRoot())
-            for n in preorder:
-                for c in n.getChildren():
-                    newEdges.append((n, c))
-            newTree.setEdges(newEdges)
-
-            swaps_array.append(swaps)
-            distances.append(Xbwt_Edit_Distance2(T, newTree))
-
-        i += 1
-    #print("Numero di scambi effettuati: ", swaps)
-    # print(newTree.preorder(newTree.getRoot()))
-
-    """
-    for node in preorder:
-        if node.getParent()is not None:
-            print(node.getLabel(), node.getParent().getLabel())
-        else:
-            print(node.getLabel())
-    """
-
-    return newTree, swaps, swaps_array, distances
-
-
-def Swap_Subtrees3_2(T):
-    #nswaps = random.randint(1, maxSwaps)
-    distances = []
-    swaps_array = []
-    newTree = copy.deepcopy(T)
-    subtrees = get_all_subtree(newTree)
-    dictSubtrees = {}
-    dictParents = {}
-    # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
-    for st in subtrees[1:len(subtrees)]:
-        if len(st) > 0:
-            dictSubtrees[st[0][0]] = st
-            parents = []
-            parent = st[0][0]
-            while parent.getParent() is not None:
-                parents.append(parent.getParent())
-                parent = parent.getParent()
-            dictParents[st[0][0]] = parents
-    exchangeable = []
-    keys = list(dictSubtrees.keys())
-    i = 1
-    # Ricavo i sottoalberi scambiabili
-    for key in keys:
-        if i <= len(keys)-2:
-            for k in keys[i:]:
-                if key not in dictParents[k]:
-                    exchangeable.append([key, k])
-        i += 1
-    dictExchanged = {}
-    for k in keys:
-        dictExchanged[k] = False
-    random.shuffle(exchangeable)
-    swaps = 0
-    # i = 0
-    nswaps = 50  # Numero di scambi da effettuare
-    while swaps < nswaps:
-        pair = random.choice(exchangeable)
-        # if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
-        if pair[1] not in dictParents[pair[0]] and pair[0] not in dictParents[pair[1]]:
-            print("Sto scambiando: ", pair[0].getLabel(), pair[1].getLabel())
-            swaps += 1
-            dictExchanged[pair[0]] = True
-            dictExchanged[pair[1]] = True
-            p1 = pair[0].getParent()
-            tmp = p1.getChildren()
-            for j in range(0, len(tmp)):
-                if tmp[j] == pair[0]:
-                    tmp[j] = pair[1]
-                    break
-            p1.setChildren(tmp)
-            p2 = pair[1].getParent()
-            tmp = p2.getChildren()
-            if p2 == pair[0].getParent():
-                # Nel caso in cui sto scambiando fratelli
-                flag = False
+                dictParents[st[0][0]] = parents
+        exchangeable = []
+        keys = list(dictSubtrees.keys())
+        i = 1
+        # Ricavo i sottoalberi scambiabili
+        for key in keys:
+            if i <= len(keys)-2:
+                for k in keys[i:]:
+                    if key not in dictParents[k]:
+                        exchangeable.append([key, k])
+            i += 1
+        dictExchanged = {}
+        for k in keys:
+            dictExchanged[k] = False
+        random.shuffle(exchangeable)
+        swaps = 0
+        # i = 0
+        nswaps = 50  # Numero di scambi da effettuare
+        while swaps < nswaps:
+            pair = random.choice(exchangeable)
+            # if not dictExchanged[pair[0]] and not dictExchanged[pair[1]]:
+            if pair[1] not in dictParents[pair[0]] and pair[0] not in dictParents[pair[1]]:
+                print("Sto scambiando: ", pair[0].getLabel(), pair[1].getLabel())
+                swaps += 1
+                dictExchanged[pair[0]] = True
+                dictExchanged[pair[1]] = True
+                p1 = pair[0].getParent()
+                tmp = p1.getChildren()
                 for j in range(0, len(tmp)):
-                    if tmp[j] == pair[1]:
-                        if flag:
+                    if tmp[j] == pair[0]:
+                        tmp[j] = pair[1]
+                        break
+                p1.setChildren(tmp)
+                p2 = pair[1].getParent()
+                tmp = p2.getChildren()
+                if p2 == pair[0].getParent():
+                    # Nel caso in cui sto scambiando fratelli
+                    flag = False
+                    for j in range(0, len(tmp)):
+                        if tmp[j] == pair[1]:
+                            if flag:
+                                tmp[j] = pair[0]
+                                break
+                            flag = True
+                else:
+                    for j in range(0, len(tmp)):
+                        if tmp[j] == pair[1]:
                             tmp[j] = pair[0]
                             break
-                        flag = True
-            else:
-                for j in range(0, len(tmp)):
-                    if tmp[j] == pair[1]:
-                        tmp[j] = pair[0]
-                        break
-            p2.setChildren(tmp)
-            pair[0].setParent(p2)
-            pair[1].setParent(p1)
-
-            # Aggiorno gli antenati per ogni nodo
-            for node in newTree.getNodes():
-                parents = []
-                parent = node
-                while parent.getParent() is not None:
-                    parents.append(parent.getParent())
-                    parent = parent.getParent()
-                dictParents[node] = parents
-
-            newEdges = []
-            preorder = newTree.preorder(newTree.getRoot())
-            for n in preorder:
-                for c in n.getChildren():
-                    newEdges.append((n, c))
-            newTree.setEdges(newEdges)
-
-            subtrees = get_all_subtree(newTree)
-            dictSubtrees = {}
-            dictParents = {}
-            # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
-            for st in subtrees[1:len(subtrees)]:
-                if len(st) > 0:
-                    dictSubtrees[st[0][0]] = st
+                p2.setChildren(tmp)
+                pair[0].setParent(p2)
+                pair[1].setParent(p1)
+    
+                # Aggiorno gli antenati per ogni nodo
+                for node in newTree.getNodes():
                     parents = []
-                    parent = st[0][0]
+                    parent = node
                     while parent.getParent() is not None:
                         parents.append(parent.getParent())
                         parent = parent.getParent()
-                    dictParents[st[0][0]] = parents
-            exchangeable = []
-            keys = list(dictSubtrees.keys())
-            j = 1
-            # Ricavo i sottoalberi scambiabili
-            for key in keys:
-                if j <= len(keys)-2:
-                    for k in keys[j:]:
-                        if key not in dictParents[k]:
-                            exchangeable.append([key, k])
-                j += 1
-
-            random.shuffle(exchangeable)
-
-            swaps_array.append(swaps)
-            distances.append(Xbwt_Edit_Distance(T, newTree))
-
-        # i+=1
-    #print("Numero di scambi effettuati: ", swaps)
-    # print(newTree.preorder(newTree.getRoot()))
-
-    """
-    for node in preorder:
-        if node.getParent()is not None:
-            print(node.getLabel(), node.getParent().getLabel())
-        else:
-            print(node.getLabel())
-    """
-
-    return newTree, swaps, swaps_array, distances
+                    dictParents[node] = parents
+    
+                newEdges = []
+                preorder = newTree.preorder(newTree.getRoot())
+                for n in preorder:
+                    for c in n.getChildren():
+                        newEdges.append((n, c))
+                newTree.setEdges(newEdges)
+    
+                subtrees = get_all_subtree(newTree)
+                dictSubtrees = {}
+                dictParents = {}
+                # Per ogni radice di sottoalbero allego il rispettivo sottoalbero
+                for st in subtrees[1:len(subtrees)]:
+                    if len(st) > 0:
+                        dictSubtrees[st[0][0]] = st
+                        parents = []
+                        parent = st[0][0]
+                        while parent.getParent() is not None:
+                            parents.append(parent.getParent())
+                            parent = parent.getParent()
+                        dictParents[st[0][0]] = parents
+                exchangeable = []
+                keys = list(dictSubtrees.keys())
+                j = 1
+                # Ricavo i sottoalberi scambiabili
+                for key in keys:
+                    if j <= len(keys)-2:
+                        for k in keys[j:]:
+                            if key not in dictParents[k]:
+                                exchangeable.append([key, k])
+                    j += 1
+    
+                random.shuffle(exchangeable)
+    
+                swaps_array.append(swaps)
+                distances.append(Xbwt_Edit_Distance(T, newTree))
+    
+            # i+=1
+        #print("Numero di scambi effettuati: ", swaps)
+        # print(newTree.preorder(newTree.getRoot()))
+    
+    
+    
+        """
+        for node in preorder:
+            if node.getParent()is not None:
+                print(node.getLabel(), node.getParent().getLabel())
+            else:
+                print(node.getLabel())
+        """
+    
+        return newTree, swaps, swaps_array, distances
 
 
 # Commentato da Pierfrancesco
