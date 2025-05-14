@@ -61,6 +61,10 @@ class XBWT():
                 PTR_linearization (str): The concatenation of the labels of the parent-to-root path
         '''
         
+        # TODO: Store the already calculated values of the PTR_linearization so that the calculation will be 
+        #       O(1) (lookup) + O(1) (adding the character)
+        #       (only if the nodes are stored in preorder, level-based or similar way)
+        
         to_ret:str = ''
         while((p:= i.getParent()) is not None):
             to_ret += p.getLabel()
@@ -108,49 +112,9 @@ class XBWT():
         
     def get_SA(self)-> list[str]:
         return self.__SA
-        
 
-
-# def string_to_tree(string:str)->Tree:
-    tree:Tree = Tree()
-    stack = []
-    parent = None
-    
-    for c in string:
-        match c:
-            case '(':
-                stack.append(parent)
-            case ')':
-                stack.pop()
-            case ',':
-                continue
-            case ' ':
-                continue
-            case _:
-                parent = stack[-1] if stack else None
-                node = Node(c)
-                tree.insert(node, parent)
-                parent = node
-    
-    return tree
-# 
-# def file_to_tree(path:str)->list[Tree]:
-    try:
-        with open(path, "r+") as f:
-            input = [tree.strip() for tree in f.read().split(FILE_SEPARATOR) if tree.strip()]
-            return [string_to_tree(i) for i in input]
-    except FileNotFoundError:
-        print("File not found")
-        exit(1)
-#         
-# def input_to_tree()-> Tree:
-    try:
-        return string_to_tree(input())
-    except Exception:
-        print("The input is empty")
-        exit(1)
-# 
-
+    def get_tree_height(self) ->int:
+        return self.__tree.getHeight()
 
 if __name__ == "__main__":
     
@@ -164,6 +128,6 @@ if __name__ == "__main__":
     # realTrees:list[Tree] = file_to_tree(os.path.join(os.getcwd(),"tree.txt"))
     
     x = XBWT(tree)
-    SA, Child = x.__compute_XBWT__()
-    F = x.__compute_F__()
-    print(SA, "\n", Child, "\n", F, "\n\n")
+    #SA, Child = x.__compute_XBWT__()
+    #F = x.__compute_F__()
+    #print(SA, "\n", Child, "\n", F, "\n\n")
