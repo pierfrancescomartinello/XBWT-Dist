@@ -1436,8 +1436,6 @@ class XBWT(object):
         IntNodes = []
         level = 0  # Tiene traccia del livello corrente di un nodo
 
-        Child = [] # Keep track of the number of child of each node
-
         index = 0  # Indice corrente dell'array IntNodes
         pos_sub = 0  # Posizioni da togliere a curr_index per trovare il padre di un nodo
         curr_index = 0  # Tiene traccia della posizione del padre di un nodo nell'array IntNodes
