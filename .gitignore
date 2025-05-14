@@ -14,3 +14,5 @@ scripts/flag_experiment.py
 ENV_DIR/*
 
 *.gv
+*.pdf
+*.png
