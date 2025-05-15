@@ -3,7 +3,7 @@ from collections import Counter
 
 def __calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> tuple[list[int], list[int]]:
     '''
-    Calculates the necessary structures to compute the distance described in Dolce et Al.,2024
+    Calculates the necessary structures to compute the distance described in Dolce et al.,2024
    
     Args:
         SA (tuple of lists of string):  The arrays SA0 and SA1, representing the labels of the two XBWTs
@@ -80,7 +80,7 @@ def __calculate_ds(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], 
 def __calculate_partition_contributions(Flag:list[int], LCP:list[int], SA:list[list[str]], alphabet:set[str]) -> list[float]:
     '''
     Calculates how much each set of the partition contributes to the final pseudometric.
-    The contribution (calculated following Dolce et Al, 2024) is calculated starting from the Jaccard distance
+    The contribution (calculated following Dolce et al, 2024) is calculated starting from the Jaccard distance
     on the contributions (multiset of characters) from the two trees
     
     
@@ -184,7 +184,8 @@ def __calculate_distance(contributions:list[float]) -> float:
     '''
     return sum(contributions)
     
-def calculate_Dolce_distance(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> float:
+# TODO: Cambia il nome alla distanza
+def calculate_distance(SA:list[list[str]], Child:list[list[int]], F:dict[str, int], n_0:int, n_1:int, k:int) -> float:
     '''
         This function is responsible to calculate the Dolce distance between two XBWTs. 
         The function fetches the return data from one part of the pipeline and gives it to the next
